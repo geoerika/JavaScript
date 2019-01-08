@@ -1,3 +1,11 @@
+const BalanceFactor = {
+      UNBALANCED_RIGHT: 1,
+      SLIGTHLY_UNBALANCED_RIGHT: 2,
+      BALANCED: 3,
+      SLIGTHLY_UNBALANCED_LEFT: 4,
+      UNBALANCED_LEFT: 5
+    }
+
 class Node {
   constructor(key) {
     this.key = key;
@@ -11,30 +19,6 @@ class AVLTree {
     this.root = null;
   }
 
-  insert(key) {
-    if (this.root === null) {
-      this.root = new Node(key);
-    } else {
-        this.insertNode(this.root, key);
-    }
-  }
-
-  insertNode(node, key) {
-    if (key < node.key) {
-      if (node.left === null) {
-        node.left = new Node(key);
-      } else {
-        this.insertNode(node.left, key);
-      }
-    } else {
-      if (node.right === null) {
-        node.right = new Node (key);
-      } else {
-        this.insertNode(node.right, key);
-      }
-    }
-  }
-
   getNodeHeight(node) {
     if (node === null) {
       return -1;
@@ -45,13 +29,7 @@ class AVLTree {
   }
 
   getBalanceFactor(node) {
-     const BalanceFactor = {
-      UNBALANCED_RIGHT: 1,
-      SLIGTHLY_UNBALANCED_RIGHT: 2,
-      BALANCED: 3,
-      SLIGTHLY_UNBALANCED_LEFT: 4,
-      UNBALANCED_LEFT: 5
-    }
+
     const heightDifference = this.getNodeHeight(node.left) - this.getNodeHeight(node.right);
     switch (heightDifference) {
       case -2:
@@ -66,21 +44,77 @@ class AVLTree {
         return BalanceFactor.BALANCED;
     }
   }
+
+  rotationLL(node) {
+    const tmp = node.left;
+    node.left = tmp.right;
+    tmp.right = node;
+    return tmp;
+  }
+
+  rotationRR(node) {
+    const tmp = node.right;
+    node.right = tmp.left;
+    tmp.left = node;
+    return tmp;
+  }
+
+  rotationLR(node) {
+    node.left = this.rotationRR(node.left);
+    return this.rotationLL(node);
+  }
+
+  rotationRL(node) {
+    node.right = this.rotationLL(node.right);
+    return this.rotationRR(node);
+  }
+
+  insert(key) {
+    this.root = this.insertNode(this.root, key);
+  }
+
+  insertNode(node, key) {
+    if (node === null) {
+      return new Node(key);
+    } else if (key < node.key) {
+      node.left = this.insertNode(node.left, key);
+    } else if(key > node.key) {
+      node.right = this.insertNode(node.right, key);
+    } else {
+      return node; //duplicated key
+    }
+
+    //balance tree if needed
+    const balanceFactor = this.getBalanceFactor(node);
+
+    if (balanceFactor === BalanceFactor.UNBALANCED_LEFT) {
+      if (key < node.left.key) {
+        node = this.rotationLL(node);
+      } else {
+        return this.rotationLR(node);
+      }
+    }
+    if (balanceFactor === BalanceFactor.SLIGTHLY_UNBALANCED_RIGHT) {
+      if (key > node.right.key) {
+        node = this.rotationRR(node);
+      } else {
+        return this.rotationRL(node);
+      }
+    }
+    return node;
+  }
+
 }
 
 const tree = new AVLTree();
 tree.insert(11);
-tree.insert(7);
+tree.insert(6);
+tree.insert(4);
+tree.insert(8);
 tree.insert(15);
-tree.insert(5);
-tree.insert(3);
-tree.insert(9);
-tree.insert(20);
-tree.insert(13);
-tree.insert(2);
-tree.insert(17);
-tree.insert(1);
-tree.insert(19);
+
+
 
 console.log(tree.getNodeHeight(tree.root));
 console.log(tree.getBalanceFactor(tree.root));
+console.log(tree);
