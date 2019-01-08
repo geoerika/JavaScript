@@ -35,18 +35,6 @@ class BinarySearchTree {
     }
   }
 
-  postOrderTraverse(callback) {
-    this.postOrderTraverseNode(this.root, callback);
-  }
-
-  postOrderTraverseNode(node, callback) {
-    if (node != null) {
-      this.postOrderTraverseNode(node.left, callback);
-      this.postOrderTraverseNode(node.right, callback);
-      callback(node.key);
-    }
-  }
-
   min () {
     return this.minNode(this.root);
   }
