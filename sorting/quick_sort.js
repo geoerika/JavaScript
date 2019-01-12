@@ -1,4 +1,4 @@
-const quickSort = (array) => {
+module.exports = function quickSort (array) {
   return quick(array, 0, array.length - 1);
 }
 
@@ -41,5 +41,5 @@ const swap = (array, a, b) => {
   [array[a] , array[b]] = [array[b], array[a]];
 }
 
-let array1 = [6, 3, 0, 2, 7, 5, 9];
-console.log(quickSort(array1));
+// let array1 = [6, 3, 0, 2, 7, 5, 9];
+// console.log(quickSort(array1));
