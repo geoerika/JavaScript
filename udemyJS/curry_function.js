@@ -5,3 +5,16 @@ function getProduct(num1) {
 }
 
 console.log(getProduct(10)(20));
+
+
+// use
+
+function getTravelTime(distance) {
+  return function(speed) {
+    return distance / speed;
+  }
+}
+
+const traveTimeBosNyc = getTravelTime(400);
+
+console.log(traveTimeBosNyc(50));
