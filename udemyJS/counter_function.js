@@ -3,6 +3,11 @@
 function myFunc() {
   let count = 0;
   return function() {
+    if (count < 4) {
+      // some computation/functionality
+    } else {
+      // throw error
+    }
     count++;
     return count;
   };
