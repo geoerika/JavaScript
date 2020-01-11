@@ -28,7 +28,7 @@ console.log(student);
 //constructor function
 
 function Car(color, brand, year) {
-  this.color = color;
+  this.color = color; //this here refers to the future object created with this constructor function
   this.brand = brand;
   this.year = year;
 }
